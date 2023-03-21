@@ -3,7 +3,7 @@ weather api project for tech returners 2023
 ## drawio - uml
 https://app.diagrams.net/#Hweatherapiproject2023%2Fweather_api%2Fmain%2Fweather_api_get_request.drawio
 
-#Update (Anthony)
+## Update (Anthony)
 21Mar(Tue)
 Added repository interface and class. Added a table Advice in Model class, to persist rules for weather advice.
 There is now a method getAdviceForCurrent(city) which loops through Advice table and construct the advice based on rule checking on weather. This method will call Irina's open API codes which returns the weather object.
