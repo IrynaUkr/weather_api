@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Advice {
+public class AdviceRule {
     @Id
     @GeneratedValue
     @Column(updatable = false, nullable = false)

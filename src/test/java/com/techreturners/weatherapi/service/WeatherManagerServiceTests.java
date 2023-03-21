@@ -1,6 +1,6 @@
 package com.techreturners.weatherapi.service;
 
-import com.techreturners.weatherapi.model.Advice;
+import com.techreturners.weatherapi.model.AdviceRule;
 import com.techreturners.weatherapi.model.Weather;
 import com.techreturners.weatherapi.respository.WeatherManagerRepository;
 import com.techreturners.weatherapi.service.WeatherManagerServiceImpl;
@@ -40,26 +40,26 @@ public class WeatherManagerServiceTests {
     }
 
     @Test
-    public void testGetAdviceByCity(){
+    public void testGetAdviceRuleByCity(){
 
-        //    Advice advice = new Advice(1L, 1, "1","**", "It is hot, wear light cloth");
-        Advice advice1 = new Advice(1L, 1, "1","9.9", "#Temperature is cold, wear an overcoat ");
-        Advice advice2 = new Advice(2L, 1, "10","20.9", "#Temperature is chilly, wear a light jacket ");
-        Advice advice3 = new Advice(3L, 1, "21","29.9", "#Temperature is warm, wear a shirt ");
-        Advice advice4 = new Advice(4L, 2, "0.1","7.9", "#No wind... ");
-        Advice advice5 = new Advice(5L, 2, "8","19.9", "#Gentle Breeze... ");
-        Advice advice6 = new Advice(6L, 2, "20","999", "#Very strong wind, drive slowly... ");
+        //    AdviceRule AdviceRule = new AdviceRule(1L, 1, "1","**", "It is hot, wear light cloth");
+        AdviceRule AdviceRule1 = new AdviceRule(1L, 1, "1","9.9", "#Temperature is cold, wear an overcoat ");
+        AdviceRule AdviceRule2 = new AdviceRule(2L, 1, "10","20.9", "#Temperature is chilly, wear a light jacket ");
+        AdviceRule AdviceRule3 = new AdviceRule(3L, 1, "21","29.9", "#Temperature is warm, wear a shirt ");
+        AdviceRule AdviceRule4 = new AdviceRule(4L, 2, "0.1","7.9", "#No wind... ");
+        AdviceRule AdviceRule5 = new AdviceRule(5L, 2, "8","19.9", "#Gentle Breeze... ");
+        AdviceRule AdviceRule6 = new AdviceRule(6L, 2, "20","999", "#Very strong wind, drive slowly... ");
 
-//        moweatherAdvisorRepository.save(advice);
-        List<Advice> adviceL = new ArrayList<>();
-        adviceL.add(advice1);
-        adviceL.add(advice2);
-        adviceL.add(advice3);
-        adviceL.add(advice4);
-        adviceL.add(advice5);
-        adviceL.add(advice6);
+//        moweatherAdvisorRepository.save(AdviceRule);
+        List<AdviceRule> AdviceRuleL = new ArrayList<>();
+        AdviceRuleL.add(AdviceRule1);
+        AdviceRuleL.add(AdviceRule2);
+        AdviceRuleL.add(AdviceRule3);
+        AdviceRuleL.add(AdviceRule4);
+        AdviceRuleL.add(AdviceRule5);
+        AdviceRuleL.add(AdviceRule6);
 
-        when(mockWeatherManagerRepository.findAll()).thenReturn(adviceL);
+        when(mockWeatherManagerRepository.findAll()).thenReturn(AdviceRuleL);
 
         String message = weatherManagerServiceImpl.getAdviceForCurrent("Dubai");
         assertEquals("#Temperature is warm, wear a shirt #Gentle Breeze... ", message);

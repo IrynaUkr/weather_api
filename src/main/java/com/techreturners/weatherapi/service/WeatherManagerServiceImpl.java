@@ -2,7 +2,7 @@ package com.techreturners.weatherapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techreturners.weatherapi.model.Weather;
-import com.techreturners.weatherapi.model.Advice;
+import com.techreturners.weatherapi.model.AdviceRule;
 import com.techreturners.weatherapi.respository.WeatherManagerRepository;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -63,24 +63,24 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
         //read Advice table from repository
         String message = "";
 
-        List<Advice> adviceList = new ArrayList<>();
+        List<AdviceRule> adviceList = new ArrayList<>();
 
         weatherManagerRepository.findAll().forEach(adviceList::add);
         //get current temperature, current wind;
         double curTemperature = weather.getCurrent().getTemp_c();
         double curWind = weather.getCurrent().getWind_mph();
         for (int i=0;i<adviceList.size(); i++){
-            Advice advice = adviceList.get(i);
-            switch (advice.getCategory()){
+            AdviceRule adviceRule = adviceList.get(i);
+            switch (adviceRule.getCategory()){
                 case 1: //category 1 is for temperature
                     //if temperature within range, insert advice
-                    if ((curTemperature >= Double.valueOf(advice.getLowest())) && (curTemperature <= Double.valueOf(advice.getHighest()))) {
-                        message += advice.getAdvice();
+                    if ((curTemperature >= Double.valueOf(adviceRule.getLowest())) && (curTemperature <= Double.valueOf(adviceRule.getHighest()))) {
+                        message += adviceRule.getAdvice();
                     }
                     break;
                 case 2: //category 2 is for windy condition
-                    if ((curWind >= Double.valueOf(advice.getLowest())) && (curWind <= Double.valueOf(advice.getHighest()))) {
-                        message += advice.getAdvice();
+                    if ((curWind >= Double.valueOf(adviceRule.getLowest())) && (curWind <= Double.valueOf(adviceRule.getHighest()))) {
+                        message += adviceRule.getAdvice();
                     }
                     break;
                 default:
