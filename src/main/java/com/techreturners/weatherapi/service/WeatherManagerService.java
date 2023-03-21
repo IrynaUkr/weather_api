@@ -6,4 +6,6 @@ public interface WeatherManagerService {
 
     Weather getCurrent(String location);
 
+    String getAdviceForCurrent(String location);
+
 }
