@@ -3,6 +3,7 @@ package com.techreturners.weatherapi.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techreturners.weatherapi.model.Weather;
 import com.techreturners.weatherapi.model.AdviceRule;
+import com.techreturners.weatherapi.model.Advice;
 import com.techreturners.weatherapi.respository.WeatherManagerRepository;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -47,21 +48,17 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
         } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);
         }
-
         return weather;
     }
 
+
     @Override
-    public  String getAdviceForCurrent(String city)  {
-        String advice = "";
-        advice = generateAdvice(getCurrent(city));
-
-        return advice;
-    }
-
-    private String generateAdvice(Weather weather) {
-        //read Advice table from repository
-        String message = "";
+    public Advice generateAdvice(Weather weather) {
+        //read AdviceRule table from repository
+        String tempMsg = "";
+        String windMsg = "";
+        String condMsg = "";
+        String humidMsg = "";
 
         List<AdviceRule> adviceList = new ArrayList<>();
 
@@ -75,19 +72,23 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
                 case 1: //category 1 is for temperature
                     //if temperature within range, insert advice
                     if ((curTemperature >= Double.valueOf(adviceRule.getLowest())) && (curTemperature <= Double.valueOf(adviceRule.getHighest()))) {
-                        message += adviceRule.getAdvice();
+                        tempMsg += adviceRule.getAdvice();
                     }
                     break;
                 case 2: //category 2 is for windy condition
                     if ((curWind >= Double.valueOf(adviceRule.getLowest())) && (curWind <= Double.valueOf(adviceRule.getHighest()))) {
-                        message += adviceRule.getAdvice();
+                        windMsg += adviceRule.getAdvice();
                     }
+                    break;
+                case 3:
+                    break;
+                case 4:
                     break;
                 default:
                     break;
             }
         }
-        return message;
+        return (new Advice(tempMsg, windMsg, condMsg, humidMsg));
     }
 
 

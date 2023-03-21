@@ -1,6 +1,7 @@
 package com.techreturners.weatherapi.service;
 
 import com.techreturners.weatherapi.model.AdviceRule;
+import com.techreturners.weatherapi.model.Advice;
 import com.techreturners.weatherapi.model.Weather;
 import com.techreturners.weatherapi.respository.WeatherManagerRepository;
 import com.techreturners.weatherapi.service.WeatherManagerServiceImpl;
@@ -10,8 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +34,7 @@ public class WeatherManagerServiceTests {
         WeatherManagerService weatherManagerService = new WeatherManagerServiceImpl();
 
             weather = ((WeatherManagerServiceImpl) weatherManagerService).getCurrent("Rome");
-            assertEquals("Partly cloudy", weather.getCurrent().getCondition().getText());
-
+            assertEquals("Clear", weather.getCurrent().getCondition().getText());
 
     }
 
@@ -61,8 +60,11 @@ public class WeatherManagerServiceTests {
 
         when(mockWeatherManagerRepository.findAll()).thenReturn(AdviceRuleL);
 
-        String message = weatherManagerServiceImpl.getAdviceForCurrent("Dubai");
-        assertEquals("#Temperature is warm, wear a shirt #Gentle Breeze... ", message);
+        Weather weather = weatherManagerServiceImpl.getCurrent("Dubai");
+        Advice advice = weatherManagerServiceImpl.generateAdvice(weather);
+        assertEquals("#Temperature is warm, wear a shirt ", advice.getTempAdvice());
+        assertEquals("#Gentle Breeze... ", advice.getWindAdvice());
+
 
     }
 
