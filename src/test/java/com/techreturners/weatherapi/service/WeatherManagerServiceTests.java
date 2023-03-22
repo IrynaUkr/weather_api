@@ -1,5 +1,6 @@
 package com.techreturners.weatherapi.service;
 
+import com.techreturners.weatherapi.exception.WeatherNotCreatedException;
 import com.techreturners.weatherapi.model.AdviceRule;
 import com.techreturners.weatherapi.model.Advice;
 import com.techreturners.weatherapi.model.Weather;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
@@ -50,16 +52,7 @@ public class WeatherManagerServiceTests {
 
         AdviceRule AdviceRule5 = new AdviceRule(5L, 2, "0.1","7.9", "#No wind... ");
         AdviceRule AdviceRule6 = new AdviceRule(6L, 2, "8","19.9", "#Gentle Breeze... ");
-        AdviceRule AdviceRule7 = new AdviceRule(7L, 2, "20","999", "#Very strong wind, drive slowly... ");
 
-        AdviceRule AdviceRule8 = new AdviceRule(8L, 3, "0.1","7.9", "#It is sunny; wear a UV protection eyeglass. ");
-        AdviceRule AdviceRule9 = new AdviceRule(9L, 3, "8","19.9", "#It is cloudy and may rain; bring an umbrella. ");
-        AdviceRule AdviceRule10 = new AdviceRule(10L, 3, "20","999", "#It has sunlight  and good visibility. ");
-
-        AdviceRule AdviceRule11 = new AdviceRule(11L, 4, "0.0","29.9", "#Dry humidity, drink enough water ");
-        AdviceRule AdviceRule12 = new AdviceRule(12L, 4, "30","50.0", "#Good humidity for health and Comfort ");
-        AdviceRule AdviceRule13= new AdviceRule(13L, 4, "51","64.9", "#Sticky Humidity. ");
-        AdviceRule AdviceRule14 = new AdviceRule(14L, 4, "65","100", "#Very Humid.");
 //        moweatherAdvisorRepository.save(AdviceRule);
         List<AdviceRule> AdviceRuleL = new ArrayList<>();
         AdviceRuleL.add(AdviceRule1);
@@ -68,15 +61,6 @@ public class WeatherManagerServiceTests {
         AdviceRuleL.add(AdviceRule4);
         AdviceRuleL.add(AdviceRule5);
         AdviceRuleL.add(AdviceRule6);
-        AdviceRuleL.add(AdviceRule7);
-        AdviceRuleL.add(AdviceRule8);
-        AdviceRuleL.add(AdviceRule9);
-        AdviceRuleL.add(AdviceRule10);
-        AdviceRuleL.add(AdviceRule11);
-        AdviceRuleL.add(AdviceRule12);
-        AdviceRuleL.add(AdviceRule13);
-        AdviceRuleL.add(AdviceRule14);
-
 
        when(mockWeatherManagerRepository.findAll()).thenReturn(AdviceRuleL);
 
@@ -86,17 +70,11 @@ public class WeatherManagerServiceTests {
         assertEquals("#Gentle Breeze... ", advice.getWindAdvice());
         assertEquals("#Good humidity for health and Comfort ", advice.getHumidAdvice());
     }
-
-    /*
     @Test
-    public void testDBAdviceRule(){
+    void shouldThrowWeatherNotCreatedExceptionWhenLocationEmptyTest(){
+        assertThrows(WeatherNotCreatedException.class,
+                ()-> weatherManagerServiceImpl.getCurrent(""));
+    }
 
-        Weather weather = weatherManagerServiceImpl.getCurrent("Paris");
-        Advice advice = weatherManagerServiceImpl.generateAdvice(weather);
-        assertEquals("#Temperature is warm, wear a shirt ", advice.getTempAdvice());
-       assertEquals("#Gentle Breeze... ", advice.getWindAdvice());
-
-
-    }*/
 }
 

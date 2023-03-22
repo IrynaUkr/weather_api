@@ -2,10 +2,14 @@ package com.techreturners.weatherapi.model;
 
 public class ManagerResponse {
     Weather weather;
-    Advice advice;
+    //Location location;
+    //Current current;
+    //Advice advice;
 
-    public ManagerResponse( Weather weather, Advice advice){
+    public ManagerResponse(Weather weather){
         this.weather = weather;
-        this.advice = advice;
+        //this.location = location;
+        //this.current = current;
+        //this.advice = advice;
     }
 }

@@ -1,6 +1,7 @@
 package com.techreturners.weatherapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techreturners.weatherapi.exception.WeatherNotCreatedException;
 import com.techreturners.weatherapi.model.Weather;
 import com.techreturners.weatherapi.model.AdviceRule;
 import com.techreturners.weatherapi.model.Advice;
@@ -29,7 +30,10 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
     WeatherManagerRepository weatherManagerRepository;
     @Override
     public  Weather getCurrent(String location){
-        Weather weather = null;
+        Weather weather;
+        if (location.isEmpty()) {
+            throw new WeatherNotCreatedException("the location is not valid");
+        }
 
         try {
             HttpGet httpGet = new HttpGet(API_URI + "current.json");
@@ -46,7 +50,7 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
             weather = objectMapper.readValue(bodyAsString, Weather.class);
             client.close();
         } catch (URISyntaxException | IOException e) {
-            throw new RuntimeException(e);
+            throw new WeatherNotCreatedException("the weather was not created");
         }
         return weather;
     }
@@ -66,7 +70,6 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
         //get current temperature, current wind;
         double curTemperature = weather.getCurrent().getTemp_c();
         double curWind = weather.getCurrent().getWind_mph();
-        double curHumid = weather.getCurrent().getHumidity();
 
         for (int i=0;i<adviceList.size(); i++){
             AdviceRule adviceRule = adviceList.get(i);
@@ -84,15 +87,14 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
                     break;
                 case 3:
                     break;
-                case 4: //humidity
-                    if ((curHumid >= Double.valueOf(adviceRule.getLowest())) && (curHumid <= Double.valueOf(adviceRule.getHighest()))) {
-                        humidMsg += adviceRule.getAdvice();
-                    }
+                case 4:
+
                     break;
                 default:
                     break;
             }
         }
+
         return (new Advice(tempMsg, windMsg, condMsg, humidMsg));
     }
 
