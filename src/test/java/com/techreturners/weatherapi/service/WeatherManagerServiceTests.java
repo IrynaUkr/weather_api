@@ -1,5 +1,6 @@
 package com.techreturners.weatherapi.service;
 
+import com.techreturners.weatherapi.exception.WeatherNotCreatedException;
 import com.techreturners.weatherapi.model.AdviceRule;
 import com.techreturners.weatherapi.model.Advice;
 import com.techreturners.weatherapi.model.Weather;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
@@ -66,6 +68,11 @@ public class WeatherManagerServiceTests {
         assertEquals("#Gentle Breeze... ", advice.getWindAdvice());
 
 
+    }
+    @Test
+    void shouldThrowWeatherNotCreatedExceptionWhenLocationEmptyTest(){
+        assertThrows(WeatherNotCreatedException.class,
+                ()-> weatherManagerServiceImpl.getCurrent(""));
     }
 
 }
