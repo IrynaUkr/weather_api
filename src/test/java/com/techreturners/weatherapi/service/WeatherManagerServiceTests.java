@@ -27,7 +27,6 @@ public class WeatherManagerServiceTests {
     @Mock
     private WeatherManagerRepository mockWeatherManagerRepository;
 
-
     @InjectMocks
     private WeatherManagerServiceImpl weatherManagerServiceImpl;
 
@@ -39,7 +38,6 @@ public class WeatherManagerServiceTests {
 
             weather = ((WeatherManagerServiceImpl) weatherManagerService).getCurrent("Rome");
             assertEquals("Clear", weather.getCurrent().getCondition().getText());
-
     }
 
     @Test
