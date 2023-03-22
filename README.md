@@ -12,6 +12,8 @@ We can run the test case in WeatherManagerServiceTests to test the getCurrent we
 
 New model classes added - Advice for the advice object, and ManagerReponse for our API response body.
 
+
+
 When WeatherManager receives REST API get request for a city, the controller can call Service class methods to fetch weather object and advice object, to insert to ManagerResponse Object to form the ResponseEntity.
 
 
