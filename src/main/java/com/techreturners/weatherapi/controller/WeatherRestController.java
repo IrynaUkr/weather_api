@@ -1,15 +1,13 @@
 package com.techreturners.weatherapi.controller;
 
 import com.techreturners.weatherapi.model.Advice;
-import com.techreturners.weatherapi.model.ManagerResponse;
 import com.techreturners.weatherapi.model.Weather;
 import com.techreturners.weatherapi.service.WeatherManagerService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -24,7 +22,6 @@ public class WeatherRestController {
             Weather weather = weatherManagerService.getCurrent(location);
             Advice advice = weatherManagerService.generateAdvice(weather);
 
-           // ManagerResponse response = new ManagerResponse(weather);
             return new ResponseEntity<>(advice, HttpStatus.OK);
         }
 

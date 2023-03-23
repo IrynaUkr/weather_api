@@ -28,8 +28,9 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
 
     @Autowired
     WeatherManagerRepository weatherManagerRepository;
+
     @Override
-    public  Weather getCurrent(String location){
+    public Weather getCurrent(String location) {
         Weather weather;
         if (location.isEmpty()) {
             throw new WeatherNotCreatedException("the location is not valid");
@@ -73,13 +74,13 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
         double curHumid = weather.getCurrent().getHumidity();
 
 
-        for (int i=0;i<adviceList.size(); i++){
+        for (int i = 0; i < adviceList.size(); i++) {
             AdviceRule adviceRule = adviceList.get(i);
-            switch (adviceRule.getCategory()){
+            switch (adviceRule.getCategory()) {
                 case 1: //category 1 is for temperature
                     //if temperature within range, insert advice
                     if ((curTemperature >= Double.valueOf(adviceRule.getLowest())) && (curTemperature <= Double.valueOf(adviceRule.getHighest()))) {
-                        tempMsg += adviceRule.getAdvice();
+                        tempMsg += curTemperature + adviceRule.getAdvice();
                     }
                     break;
                 case 2: //category 2 is for windy condition
@@ -99,6 +100,6 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
             }
         }
 
-        return (new Advice(tempMsg, windMsg, condMsg, humidMsg));
+        return (new Advice(tempMsg, windMsg, condMsg, humidMsg, weather));
     }
 }
