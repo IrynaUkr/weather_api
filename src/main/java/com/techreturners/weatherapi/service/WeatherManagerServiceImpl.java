@@ -81,6 +81,7 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
         //get current temperature, current wind;
         double curTemperature = weather.getCurrent().getTemp_c();
         double curWind = weather.getCurrent().getWind_mph();
+        String curCond = weather.getCurrent().getCondition().getText();
         double curHumid = weather.getCurrent().getHumidity();
 
 
@@ -99,6 +100,9 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
                     }
                     break;
                 case 3:
+                    if (curCond.contains(adviceRule.getLowest())){
+                        condMsg += adviceRule.getAdvice();
+                    }
                     break;
                 case 4:
                     if ((curHumid >= Double.valueOf(adviceRule.getLowest())) && (curHumid <= Double.valueOf(adviceRule.getHighest()))) {
