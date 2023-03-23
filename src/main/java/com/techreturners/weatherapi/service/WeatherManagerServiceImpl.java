@@ -101,9 +101,4 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
 
         return (new Advice(tempMsg, windMsg, condMsg, humidMsg));
     }
-
-
-
-
-
 }
