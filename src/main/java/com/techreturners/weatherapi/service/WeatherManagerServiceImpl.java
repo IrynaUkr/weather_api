@@ -1,7 +1,6 @@
 package com.techreturners.weatherapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techreturners.weatherapi.exception.OpenApiError;
 import com.techreturners.weatherapi.exception.OpenApiException;
 import com.techreturners.weatherapi.exception.WeatherNotCreatedException;
 import com.techreturners.weatherapi.model.Weather;
@@ -21,7 +20,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WeatherManagerServiceImpl implements WeatherManagerService {
@@ -33,37 +34,9 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
 
     @Override
     public Weather getCurrent(String location) {
-        Weather weather;
-        if (location.isEmpty()) {
-            throw new WeatherNotCreatedException("the location is not valid");
-        }
-
-        try {
-            HttpGet httpGet = new HttpGet(API_URI + "current.json");
-            httpGet.addHeader("key", API_KEY);
-            URI uri = null;
-            uri = new URIBuilder(httpGet.getURI())
-                    .addParameter("q", location)
-                    .build();
-            httpGet.setURI(uri);
-            CloseableHttpClient client = HttpClientBuilder.create().build();
-            CloseableHttpResponse response = client.execute(httpGet);
-
-            String bodyAsString = EntityUtils.toString(response.getEntity());
-            ObjectMapper objectMapper = new ObjectMapper();
-            //check if Http status is not successfull, then throw exception
-            final int status = response.getStatusLine().getStatusCode();
-            if (status >=300) {
-                OpenApiException exception = objectMapper.readValue(bodyAsString, OpenApiException.class);
-                throw (new WeatherNotCreatedException(exception.getError().getMessage()));
-            }
-
-            weather = objectMapper.readValue(bodyAsString, Weather.class);
-            client.close();
-        } catch (URISyntaxException | IOException e) {
-            throw new WeatherNotCreatedException("the weather was not created "+ e.getMessage());
-        }
-        return weather;
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("q", location);
+        return getAPIResponse("current.json", queryParams);
     }
 
 
@@ -81,7 +54,6 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
         //get current temperature, current wind;
         double curTemperature = weather.getCurrent().getTemp_c();
         double curWind = weather.getCurrent().getWind_mph();
-        String curCond = weather.getCurrent().getCondition().getText();
         double curHumid = weather.getCurrent().getHumidity();
 
 
@@ -100,9 +72,6 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
                     }
                     break;
                 case 3:
-                    if (curCond.contains(adviceRule.getLowest())){
-                        condMsg += adviceRule.getAdvice();
-                    }
                     break;
                 case 4:
                     if ((curHumid >= Double.valueOf(adviceRule.getLowest())) && (curHumid <= Double.valueOf(adviceRule.getHighest()))) {
@@ -116,4 +85,51 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
 
         return (new Advice(tempMsg, windMsg, condMsg, humidMsg, weather));
     }
+
+
+    @Override
+    public Weather getForecastForDays(String location, int numOfDays) {
+
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("q", location);
+        queryParams.put("days", Integer.toString(numOfDays));
+
+        return getAPIResponse("forecast.json", queryParams);
+    }
+
+    private Weather getAPIResponse(String path, Map<String, String> queryParams ) {
+        Weather weather;
+        if (queryParams.get("q").toString().isEmpty()) {
+            throw new WeatherNotCreatedException("the location is not valid");
+        }
+
+        try {
+            HttpGet httpGet = new HttpGet(API_URI + path);
+            httpGet.addHeader("key", API_KEY);
+            URIBuilder uriBuilder = new URIBuilder(httpGet.getURI());
+            queryParams.forEach((k, v) -> uriBuilder.addParameter(k, v));
+            
+            URI uri = uriBuilder.build();
+            httpGet.setURI(uri);
+            
+            CloseableHttpClient client = HttpClientBuilder.create().build();
+            CloseableHttpResponse response = client.execute(httpGet);
+            String bodyAsString = EntityUtils.toString(response.getEntity());
+            
+            ObjectMapper objectMapper = new ObjectMapper();
+            //check if Http status is not successfull, then throw exception
+            final int status = response.getStatusLine().getStatusCode();
+            if (status >=300) {
+                OpenApiException exception = objectMapper.readValue(bodyAsString, OpenApiException.class);
+                throw (new WeatherNotCreatedException(exception.getError().getMessage()));
+            }
+            weather = objectMapper.readValue(bodyAsString, Weather.class);
+            client.close();
+        } catch (URISyntaxException | IOException e) {
+            throw new WeatherNotCreatedException("the weather was not created");
+        }
+        return weather;
+    }
+
+
 }
