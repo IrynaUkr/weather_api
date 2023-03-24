@@ -3,6 +3,7 @@ package com.techreturners.weatherapi.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techreturners.weatherapi.exception.OpenApiException;
 import com.techreturners.weatherapi.exception.WeatherNotCreatedException;
+import com.techreturners.weatherapi.model.CATEGORY;
 import com.techreturners.weatherapi.model.Weather;
 import com.techreturners.weatherapi.model.AdviceRule;
 import com.techreturners.weatherapi.model.Advice;
@@ -54,26 +55,32 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
         //get current temperature, current wind;
         double curTemperature = weather.getCurrent().getTemp_c();
         double curWind = weather.getCurrent().getWind_mph();
+        String curCond = weather.getCurrent().getCondition().getText();
         double curHumid = weather.getCurrent().getHumidity();
 
 
         for (int i = 0; i < adviceList.size(); i++) {
             AdviceRule adviceRule = adviceList.get(i);
-            switch (adviceRule.getCategory()) {
-                case 1: //category 1 is for temperature
+            CATEGORY c = CATEGORY.lookup(adviceRule.getCategory());
+            //switch (adviceRule.getCategory())
+            switch (c) {
+                case TEMPERATURE: //category 1 is for temperature
                     //if temperature within range, insert advice
                     if ((curTemperature >= Double.valueOf(adviceRule.getLowest())) && (curTemperature <= Double.valueOf(adviceRule.getHighest()))) {
                         tempMsg += curTemperature + adviceRule.getAdvice();
                     }
                     break;
-                case 2: //category 2 is for windy condition
+                case WIND: //category 2 is for windy condition
                     if ((curWind >= Double.valueOf(adviceRule.getLowest())) && (curWind <= Double.valueOf(adviceRule.getHighest()))) {
                         windMsg += adviceRule.getAdvice();
                     }
                     break;
-                case 3:
+                case RAIN:
+                    if (curCond.contains(adviceRule.getLowest())){
+                        condMsg += adviceRule.getAdvice();
+                    }
                     break;
-                case 4:
+                case HUMIDITY:
                     if ((curHumid >= Double.valueOf(adviceRule.getLowest())) && (curHumid <= Double.valueOf(adviceRule.getHighest()))) {
                         humidMsg += adviceRule.getAdvice();
                     }
