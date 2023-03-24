@@ -42,13 +42,14 @@ public class WeatherManagerAdviceServiceImpl implements WeatherManagerAdviceServ
     }
 
     @Override
-    public void updateAdviceRuleById(Long id, AdviceRule adviceRule) {
+    public AdviceRule updateAdviceRuleById(Long id, AdviceRule adviceRule) {
         AdviceRule retrievedAdviceRule = weatherManagerRepository.findById(id).get();
+
         retrievedAdviceRule.setCategory(adviceRule.getCategory());
         retrievedAdviceRule.setAdvice(adviceRule.getAdvice());
         retrievedAdviceRule.setLowest(adviceRule.getLowest());
         retrievedAdviceRule.setHighest(adviceRule.getHighest());
-        weatherManagerRepository.save(retrievedAdviceRule);
+        return weatherManagerRepository.save(retrievedAdviceRule);
     }
 
     @Override

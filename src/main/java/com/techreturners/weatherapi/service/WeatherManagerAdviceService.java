@@ -8,7 +8,7 @@ public interface WeatherManagerAdviceService {
     List<AdviceRule> getAllAdviceRules();
     AdviceRule insertAdviceRule(AdviceRule adviceRule);
     AdviceRule getAdviceRuleById(Long adviceRuleId);
-    void updateAdviceRuleById(Long adviceRuleId, AdviceRule adviceRule);
+    AdviceRule updateAdviceRuleById(Long adviceRuleId, AdviceRule adviceRule);
     void deleteAdviceRuleById(Long adviceRuleId);
 
 }
