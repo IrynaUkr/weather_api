@@ -1,6 +1,7 @@
 package com.techreturners.weatherapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techreturners.weatherapi.exception.OpenApiException;
 import com.techreturners.weatherapi.exception.WeatherNotCreatedException;
 import com.techreturners.weatherapi.model.Weather;
 import com.techreturners.weatherapi.model.AdviceRule;
@@ -116,6 +117,12 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
             String bodyAsString = EntityUtils.toString(response.getEntity());
             
             ObjectMapper objectMapper = new ObjectMapper();
+            //check if Http status is not successfull, then throw exception
+            final int status = response.getStatusLine().getStatusCode();
+            if (status >=300) {
+                OpenApiException exception = objectMapper.readValue(bodyAsString, OpenApiException.class);
+                throw (new WeatherNotCreatedException(exception.getError().getMessage()));
+            }
             weather = objectMapper.readValue(bodyAsString, Weather.class);
             client.close();
         } catch (URISyntaxException | IOException e) {
