@@ -10,4 +10,6 @@ public interface WeatherManagerService {
     Weather getCurrent(String location);
     Advice generateAdvice(Weather weather);
 
+    Weather getForecastForDays(String location, int numOfDays);
+
 }
