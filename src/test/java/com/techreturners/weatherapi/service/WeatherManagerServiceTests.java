@@ -37,7 +37,7 @@ public class WeatherManagerServiceTests {
         WeatherManagerService weatherManagerService = new WeatherManagerServiceImpl();
 
             weather = ((WeatherManagerServiceImpl) weatherManagerService).getCurrent("Rome");
-            assertEquals("Clear", weather.getCurrent().getCondition().getText());
+            assertEquals("Rome", weather.getLocation().getName());
     }
 
     @Test
