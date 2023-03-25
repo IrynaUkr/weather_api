@@ -96,16 +96,15 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
 
     @Override
     public Weather getForecastForDays(String location, int numOfDays) {
-
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("q", location);
         queryParams.put("days", Integer.toString(numOfDays));
-
         return getAPIResponse("forecast.json", queryParams);
     }
 
     private Weather getAPIResponse(String path, Map<String, String> queryParams ) {
         Weather weather;
+        
         if (queryParams.get("q").toString().isEmpty()) {
             throw new WeatherNotCreatedException("the location is not valid");
         }
@@ -126,7 +125,7 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
             ObjectMapper objectMapper = new ObjectMapper();
             //check if Http status is not successfull, then throw exception
             final int status = response.getStatusLine().getStatusCode();
-            if (status >=300) {
+            if (status >= 300) {
                 OpenApiException exception = objectMapper.readValue(bodyAsString, OpenApiException.class);
                 throw (new WeatherNotCreatedException(exception.getError().getMessage()));
             }
@@ -135,6 +134,7 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
         } catch (URISyntaxException | IOException e) {
             throw new WeatherNotCreatedException("the weather was not created");
         }
+
         return weather;
     }
 

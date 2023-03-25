@@ -26,9 +26,10 @@ public class WeatherRestController {
         }
 
         @GetMapping({"/forecast/{location}"})
-        public ResponseEntity<Weather> getForecastWeatherByLocation(@PathVariable String location,
+        public ResponseEntity<Advice> getForecastWeatherByLocation(@PathVariable String location,
                                                                     @RequestParam int numOfDays ) {
             Weather weather = weatherManagerService.getForecastForDays(location, numOfDays);
-            return new ResponseEntity<>(weather, HttpStatus.OK);
+            Advice advice = weatherManagerService.generateAdvice(weather);
+            return new ResponseEntity<>(advice, HttpStatus.OK);
         }
 }

@@ -11,6 +11,7 @@ public class Day {
   Double maxtemp_c;
   Double mintemp_c;
   Double avgtemp_c;
+  Double avghumidity;
   Condition condition;
   
 }
