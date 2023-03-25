@@ -76,7 +76,7 @@ public class WeatherManagerServiceImpl implements WeatherManagerService {
                     }
                     break;
                 case RAIN:
-                    if (curCond.contains(adviceRule.getLowest())){
+                    if (curCond.toLowerCase().contains(adviceRule.getLowest().toLowerCase())){
                         condMsg += adviceRule.getAdvice();
                     }
                     break;
