@@ -8,8 +8,8 @@ Project based on a public API to meet a set of requirements as detailed below :
 * [Acceptance criteria and assumptions](#acceptance-criteria-and-assumptions)
 * [Technologies](#technologies)
 * [How to run the project](#how-to-run-the-project)
-* [Project update](#project update)
-* [UML diagram](#uml-diagram)
+* [Project Update](#project-update)
+* [System Design](#system-design)
 
 ## Acceptance Criteria and Assumptions
 Weather service should provide current weather conditions for a given location  
@@ -32,10 +32,7 @@ The advice message should provide the following information:
 - On the command line execute :  
   `mvn spring-boot:run`
 
-## UML diagram
-https://app.diagrams.net/#Hweatherapiproject2023%2Fweather_api%2Fmain%2Fweather_api_get_request.drawio
-
-## Project Update 
+## Project Update
 21 March(Tue) Anthony
 
 Added repository interface and class. 
@@ -48,3 +45,5 @@ New model classes added - Advice for the advice object, and ??ManagerReponse for
 When WeatherManager receives REST API get request for a city, the controller can call Service class methods to fetch weather object and advice object, 
 to insert to ManagerResponse?? Object to form the ResponseEntity.* Please ignore ManagerResponse for now (Tuesday), I cannot get it working. use advice class for responseEntity is fine.
 
+## System Design
+https://app.diagrams.net/#Hweatherapiproject2023%2Fweather_api%2Fmain%2Fweather_api_get_request.drawio
