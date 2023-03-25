@@ -13,11 +13,12 @@ public class Hour {
 
   Double temp_c;
   Double wind_mph;
+  Integer is_day;
+  Double humidity;
   Double pressure_mb;
   @JsonFormat
   (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:MM")
   private Date time;
 
   Condition condition;
-  
 }
